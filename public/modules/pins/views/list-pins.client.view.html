@@ -1,0 +1,20 @@
+<section data-ng-controller="PinsController" data-ng-init="find()">
+	<div class="page-header">
+		<h1>Pins</h1>
+	</div>
+	<div class="list-group">
+		<a data-ng-repeat="pin in pins" data-ng-href="#!/pins/{{pin._id}}" class="list-group-item">
+			<small class="list-group-item-text">
+				Posted on
+				<span data-ng-bind="pin.created | date:'mediumDate'"></span>
+				by
+				<span data-ng-bind="pin.user.displayName"></span>
+			</small>
+			<h4 class="list-group-item-heading" data-ng-bind="pin.title"></h4>
+			<p class="list-group-item-text" data-ng-bind="pin.content"></p>
+		</a>
+	</div>
+	<div class="alert alert-warning text-center" data-ng-if="pins.$resolved && !pins.length">
+		No pins yet, why don't you <a href="/#!/pins/create">create one</a>?
+	</div>
+</section>
