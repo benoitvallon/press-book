@@ -1,8 +1,7 @@
 'use strict';
 
-angular.module('pins').controller('PinsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Pins',
-  function($scope, $stateParams, $location, Authentication, Pins) {
-    $scope.authentication = Authentication;
+angular.module('pins').controller('PinsController', ['$scope', '$stateParams', '$location', 'Pins',
+  function($scope, $stateParams, $location, Pins) {
 
     $scope.create = function() {
       var pin = new Pins({
