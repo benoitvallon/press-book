@@ -4,26 +4,50 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+  async = require('async'),
   errorHandler = require('./errors.server.controller'),
   Pin = mongoose.model('Pin'),
   _ = require('lodash');
+
+var pinterestAPI = require('pinterest-api');
 
 /**
  * Create a pin
  */
 exports.create = function(req, res) {
-  var pin = new Pin(req.body);
-  pin.user = req.user;
 
-  pin.save(function(err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
+  if(!req.body.accountName || !req.body.boardName) {
+    return res.status(400).send({
+      message: 'Account name or board name missing'
+    });
+  }
+
+  var pinterest = pinterestAPI(req.body.accountName);
+  pinterest.setObtainDates(false);
+
+  // default and max is 50
+  // pinterest.setItemsPerPage(50);
+
+  pinterest.getPinsFromBoard(req.body.boardName, true, function (pins) {
+    async.forEach(pins.data, function (pin, callback){
+      // adding some data
+      pin._id = pin.id;
+      pin.accountName = req.body.accountName;
+      pin.boardName = req.body.boardName;
+      pin.imageLink = pin.images['237x'].url;
+
+      // replace some special character
+      pin.description = pin.description.replace(/&#233;/g, 'é');
+
+      pin = new Pin(pin);
+      pin.save(function(err) {
+        callback(); // tell async that the iterator has completed
       });
-    } else {
-      res.json(pin);
-    }
+    }, function(err) {
+      res.json({});
+    });
   });
+
 };
 
 /**
@@ -73,7 +97,7 @@ exports.delete = function(req, res) {
  * List of Pins
  */
 exports.list = function(req, res) {
-  Pin.find().sort('-created').populate('user', 'displayName').exec(function(err, pins) {
+  Pin.find().exec(function(err, pins) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

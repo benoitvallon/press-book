@@ -5,14 +5,15 @@ angular.module('pins').controller('PinsController', ['$scope', '$stateParams', '
 
     $scope.create = function() {
       var pin = new Pins({
-        title: this.title,
-        content: this.content
+        accountName: this.accountName,
+        boardName: this.boardName
       });
-      pin.$save(function(response) {
-        $location.path('pins/' + response._id);
 
-        $scope.title = '';
-        $scope.content = '';
+      pin.$save(function(response) {
+        $location.path('pins');
+
+        $scope.accountName = '';
+        $scope.boardName = '';
       }, function(errorResponse) {
         $scope.error = errorResponse.data.message;
       });

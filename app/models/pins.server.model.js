@@ -10,24 +10,38 @@ var mongoose = require('mongoose'),
  * Pin Schema
  */
 var PinSchema = new Schema({
+  _id: {
+    type: String,
+    default: '',
+  },
   created: {
     type: Date,
     default: Date.now
   },
-  title: {
-    type: String,
-    default: '',
-    trim: true,
-    required: 'Title cannot be blank'
-  },
-  content: {
+  description: {
     type: String,
     default: '',
     trim: true
   },
-  user: {
-    type: Schema.ObjectId,
-    ref: 'User'
+  accountName: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  boardName: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  link: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  imageLink: {
+    type: String,
+    default: '',
+    trim: true
   }
 });
 

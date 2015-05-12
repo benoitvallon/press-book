@@ -6,6 +6,6 @@ angular.module('pins').run(['Menus',
     // Set top bar menu items
     Menus.addMenuItem('topbar', 'Pins', 'pins', 'dropdown', '/pins(/create)?');
     Menus.addSubMenuItem('topbar', 'pins', 'List Pins', 'pins');
-    Menus.addSubMenuItem('topbar', 'pins', 'New Pin', 'pins/create');
+    Menus.addSubMenuItem('topbar', 'pins', 'Extract Pins', 'pins/create');
   }
 ]);
