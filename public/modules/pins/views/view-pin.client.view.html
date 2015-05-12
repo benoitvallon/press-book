@@ -1,22 +1,22 @@
 <section data-ng-controller="PinsController" data-ng-init="findOne()">
-	<div class="page-header">
-		<h1 data-ng-bind="pin.title"></h1>
-	</div>
-	<div class="pull-right" data-ng-show="authentication.user._id == pin.user._id">
-		<a class="btn btn-primary" href="/#!/pins/{{pin._id}}/edit">
-			<i class="glyphicon glyphicon-edit"></i>
-		</a>
-		<a class="btn btn-primary" data-ng-click="remove();">
-			<i class="glyphicon glyphicon-trash"></i>
-		</a>
-	</div>
-	<small>
-		<em class="text-muted">
-			Posted on
-			<span data-ng-bind="pin.created | date:'mediumDate'"></span>
-			by
-			<span data-ng-bind="pin.user.displayName"></span>
-		</em>
-	</small>
-	<p class="lead" data-ng-bind="pin.content"></p>
+  <div class="page-header">
+    <h1 data-ng-bind="pin.title"></h1>
+  </div>
+  <div class="pull-right" data-ng-show="authentication.user._id == pin.user._id">
+    <a class="btn btn-primary" href="/#!/pins/{{pin._id}}/edit">
+      <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    <a class="btn btn-primary" data-ng-click="remove();">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+  <small>
+    <em class="text-muted">
+      Posted on
+      <span data-ng-bind="pin.created | date:'mediumDate'"></span>
+      by
+      <span data-ng-bind="pin.user.displayName"></span>
+    </em>
+  </small>
+  <p class="lead" data-ng-bind="pin.content"></p>
 </section>
