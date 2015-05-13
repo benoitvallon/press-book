@@ -75,5 +75,18 @@ angular.module('images').controller('ImagesController', ['$scope', '$stateParams
         imageId: $stateParams.imageId
       });
     };
+
+    $scope.addToPressbook = function(image) {
+      image.isInPressbook = !image.isInPressbook;
+
+      image.$update(function() {
+      }, function(errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+    };
+
+    $scope.convertSize = function(image) {
+      return Math.round(image.size / 1024 / 1024 * 100) / 100 + 'Mb';
+    };
   }
 ]);

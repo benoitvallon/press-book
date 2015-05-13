@@ -3,12 +3,24 @@
     <h1>My images</h1>
   </div>
   <div class="list-group">
-    <a data-ng-repeat="image in images" data-ng-href="#!/images/{{image._id}}" class="list-group-item">
+    <div data-ng-repeat="image in images" data-ng-href="" class="list-group-item">
+
       <img class="pull-left" data-ng-src="/uploads/{{image.filename}}" style="margin-right:20px;width:237px;">
+
+      <div class="pull-right">
+        <a class="btn btn-primary" href="/#!/images/{{image._id}}">
+          <i class="glyphicon glyphicon-eye-open"></i>
+        </a>
+        <a class="btn btn-primary" data-ng-click="remove(image);">
+          <i class="glyphicon glyphicon-trash"></i>
+        </a>
+      </div>
+
+
       <h4 class="list-group-item-heading">
         Name: {{image.name}}
         <small>
-          size: {{image.size}}
+          size: {{convertSize(image)}}, dimensions: {{image.width}}px x {{image.height}}px
         </small>
       </h4>
       <h4 class="list-group-item-heading">
@@ -18,8 +30,16 @@
         Uploaded on
         <span data-ng-bind="image.created | date:'mediumDate'"></span>
       </small>
+      <br>
+      <br>
+      <div>
+        <button class="btn" ng-click="addToPressbook(image)"
+        ng-class="{'btn-success': !image.isInPressbook, 'btn-warning': image.isInPressbook}">
+        {{image.isInPressbook ? 'Remove from pressbook' : 'Add to pressbook'}}</button>
+      </div>
+
       <div class="clearfix"></div>
-    </a>
+    </div>
   </div>
   <div class="alert alert-warning text-center" data-ng-if="images.$resolved && !images.length">
     No images yet, why don't you <a href="/#!/images/create">upload some</a>?

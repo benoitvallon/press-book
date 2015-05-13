@@ -13,6 +13,7 @@ module.exports = function(app) {
 
   app.route('/images/:imageId')
     .get(images.read)
+    .put(images.update)
     .delete(images.delete);
 
   // Finish by binding the image middleware
