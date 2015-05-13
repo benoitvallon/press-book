@@ -7,6 +7,15 @@
 
       <img class="pull-left" data-ng-src="{{getImageLink(pressbook)}}" style="margin-right:20px;width:237px;">
 
+      <div class="pull-right">
+        <a class="btn btn-primary">
+          <i class="glyphicon glyphicon-edit"></i>
+        </a>
+        <a class="btn btn-primary" data-ng-click="remove(pressbook);">
+          <i class="glyphicon glyphicon-trash"></i>
+        </a>
+      </div>
+
       <h4 class="list-group-item-heading">
         Name: {{pressbook.title}}
       </h4>

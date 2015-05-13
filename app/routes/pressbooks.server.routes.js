@@ -9,4 +9,12 @@ module.exports = function(app) {
   // Pressbook Routes
   app.route('/pressbooks')
     .get(pressbooks.list);
+
+  app.route('/pressbooks/:pressbookId')
+    .get(pressbooks.read)
+    .put(pressbooks.update)
+    .delete(pressbooks.delete);
+
+  // Finish by binding the pressbook middleware
+  app.param('pressbookId', pressbooks.pressbookByID);
 };

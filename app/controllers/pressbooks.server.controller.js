@@ -7,14 +7,9 @@ var mongoose = require('mongoose'),
   async = require('async'),
   errorHandler = require('./errors.server.controller'),
   Pressbook = mongoose.model('Pressbook'),
+  Pin = mongoose.model('Pin'),
+  ImageModel = mongoose.model('Image'),
   _ = require('lodash');
-
-/**
- * Create a pressbook
- */
-exports.create = function(req, res) {
-  res.json({});
-};
 
 /**
  * Show the current pressbook
@@ -48,15 +43,41 @@ exports.update = function(req, res) {
 exports.delete = function(req, res) {
   var pressbook = req.pressbook;
 
-  pressbook.remove(function(err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
+  var relatedAsset = {};
+  if(pressbook.image) {
+    ImageModel.findById(pressbook.image, function(err, image) {
+      relatedAsset = image;
+      saveAsset();
+    });
+  } else if(pressbook.pin) {
+    Pin.findById(pressbook.pin, function(err, pin) {
+      relatedAsset = pin;
+      saveAsset();
+    });
+  }
+
+  var saveAsset = function() {
+    relatedAsset.isInPressbook = false;
+    relatedAsset.pressbookID = '';
+    console.log('relatedAsset', relatedAsset);
+    relatedAsset.save(function(err) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
+      pressbook.remove(function(err) {
+        if (err) {
+          return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+          });
+        }
+        res.json(pressbook);
       });
-    } else {
-      res.json(pressbook);
-    }
-  });
+    });
+  };
+
+
 };
 
 /**
