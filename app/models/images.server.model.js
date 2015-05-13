@@ -38,6 +38,16 @@ var ImageSchema = new Schema({
     default: '',
     trim: true
   },
+  width: {
+    type: Number,
+    default: '',
+    trim: true
+  },
+  height: {
+    type: Number,
+    default: '',
+    trim: true
+  },
   path: {
     type: String,
     default: '',

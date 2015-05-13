@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
   formidable = require('formidable'),
   fs = require('fs'),
   crypto = require('crypto'),
+  sizeOf = require('image-size'),
   errorHandler = require('./errors.server.controller'),
   ImageModel = mongoose.model('Image'),
   _ = require('lodash');
@@ -25,9 +26,13 @@ exports.create = function(req, res) {
       var checksum = shasum.update(data).digest('hex');
       var newPath = __dirname + '/../../public/uploads/' + checksum;
 
+      var dimensions = sizeOf(data);
+
       fs.writeFile(newPath, data, function (err) {
         files.file._id = checksum;
         files.file.filename = checksum;
+        files.file.width = dimensions.width;
+        files.file.height = dimensions.height;
         var file = new ImageModel(files.file);
         file.save(function(err) {
           res.json({});
