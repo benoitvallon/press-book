@@ -29,6 +29,14 @@
         Extracted on
         <span data-ng-bind="pin.created | date:'mediumDate'"></span>
       </small>
+      <br>
+      <br>
+      <div>
+        <button class="btn" ng-click="addToPressbook(pin)"
+        ng-class="{'btn-success': !pin.isInPressbook, 'btn-warning': pin.isInPressbook}">
+        {{pin.isInPressbook ? 'Remove from pressbook' : 'Add to pressbook'}}</button>
+      </div>
+
       <div class="clearfix"></div>
     </div>
   </div>

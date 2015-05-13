@@ -61,5 +61,13 @@ angular.module('pins').controller('PinsController', ['$scope', '$stateParams', '
       }
     };
 
+    $scope.addToPressbook = function(pin) {
+      pin.isInPressbook = !pin.isInPressbook;
+
+      pin.$update(function() {
+      }, function(errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+    };
   }
 ]);

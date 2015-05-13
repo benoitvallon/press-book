@@ -42,6 +42,11 @@ var PinSchema = new Schema({
     type: String,
     default: '',
     trim: true
+  },
+  isInPressbook: {
+    type: Boolean,
+    default: '',
+    trim: true
   }
 });
 
