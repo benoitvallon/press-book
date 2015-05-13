@@ -83,6 +83,7 @@ exports.update = function(req, res) {
   // the pin must be in pressbook and does not have an id, it needs to be created
   if(pin.isInPressbook && !pin.pressbookID) {
     pressbook.pin = pin._id;
+    pressbook.description = pin.description;
     pressbook.save(function(err, data) {
       if (err) {
         return res.status(400).send({
