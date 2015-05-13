@@ -39,6 +39,8 @@ exports.create = function(req, res) {
 
       // replace some special character
       pin.description = pin.description.replace(/&#233;/g, 'é');
+      pin.description = pin.description.replace(/&lt;3/g, '♥');
+      pin.description = pin.description.replace(/&#160;/g, ' ');
 
       pin = new Pin(pin);
       pin.save(function(err) {
