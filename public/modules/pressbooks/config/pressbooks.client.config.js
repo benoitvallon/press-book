@@ -6,5 +6,6 @@ angular.module('pressbooks').run(['Menus',
     // Set top bar menu items
     Menus.addMenuItem('topbar', 'Pressbooks', 'pressbooks', 'dropdown', '/pressbooks(/create)?');
     Menus.addSubMenuItem('topbar', 'pressbooks', 'List Pressbooks', 'pressbooks');
+    Menus.addSubMenuItem('topbar', 'pressbooks', 'Generate Pressbooks', 'pressbooks/generate');
   }
 ]);

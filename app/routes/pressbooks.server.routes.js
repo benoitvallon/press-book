@@ -10,6 +10,9 @@ module.exports = function(app) {
   app.route('/pressbooks')
     .get(pressbooks.list);
 
+  app.route('/pressbooks/generate')
+    .get(pressbooks.generate);
+
   app.route('/pressbooks/:pressbookId')
     .get(pressbooks.read)
     .put(pressbooks.update)

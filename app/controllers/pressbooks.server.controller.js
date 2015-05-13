@@ -9,6 +9,8 @@ var mongoose = require('mongoose'),
   Pressbook = mongoose.model('Pressbook'),
   Pin = mongoose.model('Pin'),
   ImageModel = mongoose.model('Image'),
+  pdf = require('html-pdf'),
+  fs = require('fs'),
   _ = require('lodash');
 
 /**
@@ -16,6 +18,19 @@ var mongoose = require('mongoose'),
  */
 exports.read = function(req, res) {
   res.json(req.pressbook);
+};
+
+exports.generate = function(req, res) {
+
+  var html = fs.readFileSync('template-html.html', 'utf8');
+  var options = { filename: 'template.pdf', format: 'Letter' };
+
+  pdf.create(html, options).toFile(function(err, data) {
+    if (err) return console.log(err);
+    console.log(data); // { filename: '/tmp/html-pdf-8ymPV.pdf' }
+    res.json({});
+  });
+
 };
 
 /**
@@ -84,8 +99,6 @@ exports.delete = function(req, res) {
       });
     });
   };
-
-
 };
 
 /**

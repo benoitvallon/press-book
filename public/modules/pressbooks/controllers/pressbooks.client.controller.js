@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('pressbooks').controller('PressbooksController', ['$scope', '$stateParams', '$location', 'Pressbooks',
-  function($scope, $stateParams, $location, Pressbooks) {
+angular.module('pressbooks').controller('PressbooksController', ['$scope', '$stateParams', '$location', 'Pressbooks', '$http',
+  function($scope, $stateParams, $location, Pressbooks, $http) {
     $scope.pressbookTempo = {};
 
     $scope.remove = function(pressbook) {
@@ -73,7 +73,19 @@ angular.module('pressbooks').controller('PressbooksController', ['$scope', '$sta
         $scope.pressbookTempo.title = '';
         $scope.pressbookTempo.description = '';
       }
+    };
 
+    $scope.generatePressbok = function() {
+      $http.get('/pressbooks/generate').
+      success(function(data, status, headers, config) {
+        console.log('data', data);
+        // this callback will be called asynchronously
+        // when the response is available
+      }).
+      error(function(data, status, headers, config) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      });
     };
   }
 ]);
