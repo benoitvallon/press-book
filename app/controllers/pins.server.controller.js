@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
   async = require('async'),
   errorHandler = require('./errors.server.controller'),
   Pin = mongoose.model('Pin'),
+  Pressbook = mongoose.model('Pressbook'),
   _ = require('lodash');
 
 var pinterestAPI = require('pinterest-api');
@@ -64,16 +65,48 @@ exports.update = function(req, res) {
   var pin = req.pin;
 
   pin = _.extend(pin, req.body);
+  var pressbook = new Pressbook();
 
-  pin.save(function(err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
+  var savePin = function() {
+    pin.save(function(err) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
       res.json(pin);
-    }
-  });
+    });
+  };
+
+  // the pin must be in pressbook and does not have an id, it needs to be created
+  if(pin.isInPressbook && !pin.pressbookID) {
+    pressbook.pin = pin._id;
+    pressbook.save(function(err, data) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
+      pin.pressbookID = data._id;
+      savePin();
+    });
+  }
+  // the pin must not be in pressbook and has an id, it needs to be deleted
+  else if(!pin.isInPressbook && pin.pressbookID) {
+    pressbook._id = pin.pressbookID;
+
+    pin.pressbookID = '';
+    pressbook.remove(function(err) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
+      savePin();
+    });
+  } else {
+    savePin();
+  }
 };
 
 /**

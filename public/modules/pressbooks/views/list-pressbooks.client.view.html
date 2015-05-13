@@ -3,23 +3,23 @@
     <h1>My pressbooks</h1>
   </div>
   <div class="list-group">
-    <a data-ng-repeat="pressbook in pressbooks" data-ng-href="#!/pressbooks/{{pressbook._id}}" class="list-group-item">
-      <img class="pull-left" data-ng-src="/uploads/{{pressbook.filename}}" style="margin-right:20px;width:237px;">
+    <div data-ng-repeat="pressbook in pressbooks" class="list-group-item">
+
+      <img class="pull-left" data-ng-src="{{getImageLink(pressbook)}}" style="margin-right:20px;width:237px;">
+
       <h4 class="list-group-item-heading">
-        Name: {{pressbook.name}}
-        <small>
-          size: {{pressbook.size}}
-        </small>
+        Name: {{pressbook.title}}
       </h4>
       <h4 class="list-group-item-heading">
-        {{pressbook.description}}
+        Description: {{pressbook.description}}
       </h4>
       <small class="list-group-item-text">
-        Uploaded on
+        Added on
         <span data-ng-bind="pressbook.created | date:'mediumDate'"></span>
+        from type: {{getType(pressbook)}}
       </small>
       <div class="clearfix"></div>
-    </a>
+    </div>
   </div>
   <div class="alert alert-warning text-center" data-ng-if="pressbooks.$resolved && !pressbooks.length">
     No pressbook items yet.

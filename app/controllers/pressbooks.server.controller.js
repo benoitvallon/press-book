@@ -63,7 +63,7 @@ exports.delete = function(req, res) {
  * List of Pressbooks
  */
 exports.list = function(req, res) {
-  Pressbook.find().exec(function(err, pressbooks) {
+  Pressbook.find().sort('-created').populate('image', 'filename').populate('pin', 'imageLink').exec(function(err, pressbooks) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -78,7 +78,7 @@ exports.list = function(req, res) {
  * Pressbook middleware
  */
 exports.pressbookByID = function(req, res, next, id) {
-  Pressbook.findById(id).populate('user', 'displayName').exec(function(err, pressbook) {
+  Pressbook.findById(id).populate('image', 'size').exec(function(err, pressbook) {
     if (err) return next(err);
     if (!pressbook) return next(new Error('Failed to load pressbook ' + id));
     req.pressbook = pressbook;

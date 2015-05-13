@@ -15,23 +15,23 @@ var PressbookSchema = new Schema({
     default: Date.now
   },
   pin: {
-    type: Schema.ObjectId,
+    type: String,
     ref: 'Pin'
   },
   image: {
-    type: Schema.ObjectId,
+    type: String,
     ref: 'Image'
+  },
+  title: {
+    type: String,
+    default: '',
+    trim: true
   },
   description: {
     type: String,
     default: '',
     trim: true
   },
-  imageLink: {
-    type: String,
-    default: '',
-    trim: true
-  }
 });
 
 mongoose.model('Pressbook', PressbookSchema);

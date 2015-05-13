@@ -45,9 +45,13 @@ var PinSchema = new Schema({
   },
   isInPressbook: {
     type: Boolean,
-    default: '',
+    default: false,
     trim: true
-  }
+  },
+  pressbookID: {
+    type: String,
+    default: '',
+  },
 });
 
 mongoose.model('Pin', PinSchema);
