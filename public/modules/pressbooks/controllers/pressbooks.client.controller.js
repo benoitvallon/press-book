@@ -64,9 +64,16 @@ angular.module('pressbooks').controller('PressbooksController', ['$scope', '$sta
     };
 
     $scope.edit = function(pressbook) {
-      pressbook.edit = true;
-      $scope.pressbookTempo.title = pressbook.title;
-      $scope.pressbookTempo.description = pressbook.description;
+      pressbook.edit = !pressbook.edit;
+
+      if(pressbook.edit) {
+        $scope.pressbookTempo.title = pressbook.title;
+        $scope.pressbookTempo.description = pressbook.description;
+      } else {
+        $scope.pressbookTempo.title = '';
+        $scope.pressbookTempo.description = '';
+      }
+
     };
   }
 ]);
