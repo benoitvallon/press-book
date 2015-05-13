@@ -119,15 +119,3 @@ exports.pinByID = function(req, res, next, id) {
     next();
   });
 };
-
-/**
- * Pin authorization middleware
- */
-exports.hasAuthorization = function(req, res, next) {
-  if (req.pin.user.id !== req.user.id) {
-    return res.status(403).send({
-      message: 'User is not authorized'
-    });
-  }
-  next();
-};
