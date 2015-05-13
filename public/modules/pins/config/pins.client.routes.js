@@ -16,10 +16,6 @@ angular.module('pins').config(['$stateProvider',
     state('viewPin', {
       url: '/pins/:pinId',
       templateUrl: 'modules/pins/views/view-pin.client.view.html'
-    }).
-    state('editPin', {
-      url: '/pins/:pinId/edit',
-      templateUrl: 'modules/pins/views/edit-pin.client.view.html'
     });
   }
 ]);

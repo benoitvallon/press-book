@@ -54,5 +54,12 @@ angular.module('pins').controller('PinsController', ['$scope', '$stateParams', '
         pinId: $stateParams.pinId
       });
     };
+
+    $scope.getBigImageLink = function (pin) {
+      if(pin.imageLink) {
+        return pin.imageLink.replace('237x', '736x');
+      }
+    };
+
   }
 ]);

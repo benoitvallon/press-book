@@ -3,8 +3,19 @@
     <h1>Pins</h1>
   </div>
   <div class="list-group">
-    <a data-ng-repeat="pin in pins" data-ng-href="#!/pins/{{pin._id}}" class="list-group-item">
+    <div data-ng-repeat="pin in pins" class="list-group-item">
+
       <img class="pull-left" data-ng-src="{{pin.imageLink}}" style="margin-right:20px;">
+
+      <div class="pull-right">
+        <a class="btn btn-primary" href="/#!/pins/{{pin._id}}">
+          <i class="glyphicon glyphicon-eye-open"></i>
+        </a>
+        <a class="btn btn-primary" data-ng-click="remove(pin);">
+          <i class="glyphicon glyphicon-trash"></i>
+        </a>
+      </div>
+
       <h4 class="list-group-item-heading">
         Board: {{pin.boardName}}
         <small>
@@ -15,11 +26,11 @@
         {{pin.description}}
       </h4>
       <small class="list-group-item-text">
-        Created on
+        Extracted on
         <span data-ng-bind="pin.created | date:'mediumDate'"></span>
       </small>
       <div class="clearfix"></div>
-    </a>
+    </div>
   </div>
   <div class="alert alert-warning text-center" data-ng-if="pins.$resolved && !pins.length">
     No pins yet, why don't you <a href="/#!/pins/create">extract some</a>?
