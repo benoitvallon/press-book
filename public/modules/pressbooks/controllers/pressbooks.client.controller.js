@@ -2,6 +2,7 @@
 
 angular.module('pressbooks').controller('PressbooksController', ['$scope', '$stateParams', '$location', 'Pressbooks',
   function($scope, $stateParams, $location, Pressbooks) {
+    $scope.pressbookTempo = {};
 
     $scope.remove = function(pressbook) {
       if (pressbook) {
@@ -19,11 +20,18 @@ angular.module('pressbooks').controller('PressbooksController', ['$scope', '$sta
       }
     };
 
-    $scope.update = function() {
-      var pressbook = $scope.pressbook;
+    $scope.update = function(pressbook) {
+      if($scope.pressbookTempo.title) {
+        pressbook.title = $scope.pressbookTempo.title;
+        $scope.pressbookTempo.title = '';
+      }
+      if($scope.pressbookTempo.description) {
+        pressbook.description = $scope.pressbookTempo.description;
+        $scope.pressbookTempo.description = '';
+      }
 
-      pressbook.$update(function() {
-        $location.path('pressbooks/' + pressbook._id);
+      pressbook.$update(function(err) {
+        pressbook.edit = false;
       }, function(errorResponse) {
         $scope.error = errorResponse.data.message;
       });
@@ -40,9 +48,9 @@ angular.module('pressbooks').controller('PressbooksController', ['$scope', '$sta
     };
 
     $scope.getImageLink = function (pressbook) {
-      if(pressbook.image) {
+      if(pressbook && pressbook.image) {
         return '/uploads/' + pressbook.image.filename;
-      } else if(pressbook.pin) {
+      } else if(pressbook && pressbook.pin) {
         return pressbook.pin.imageLink.replace('237x', '736x');
       }
     };
@@ -53,6 +61,12 @@ angular.module('pressbooks').controller('PressbooksController', ['$scope', '$sta
       } else if(pressbook.pin) {
         return 'Pin';
       }
+    };
+
+    $scope.edit = function(pressbook) {
+      pressbook.edit = true;
+      $scope.pressbookTempo.title = pressbook.title;
+      $scope.pressbookTempo.description = pressbook.description;
     };
   }
 ]);

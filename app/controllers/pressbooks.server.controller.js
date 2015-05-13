@@ -32,7 +32,15 @@ exports.update = function(req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(pressbook);
+      if(pressbook.image) {
+        pressbook.populate('image', 'filename', function(err, pressbook) {
+          res.json(pressbook);
+        });
+      } else if (pressbook.pin) {
+        pressbook.populate('pin', 'imageLink', function(err, pressbook) {
+          res.json(pressbook);
+        });
+      }
     }
   });
 };

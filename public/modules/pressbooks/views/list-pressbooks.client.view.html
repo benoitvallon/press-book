@@ -8,7 +8,7 @@
       <img class="pull-left" data-ng-src="{{getImageLink(pressbook)}}" style="margin-right:20px;width:237px;">
 
       <div class="pull-right">
-        <a class="btn btn-primary">
+        <a class="btn btn-primary" data-ng-click="edit(pressbook);">
           <i class="glyphicon glyphicon-edit"></i>
         </a>
         <a class="btn btn-primary" data-ng-click="remove(pressbook);">
@@ -22,6 +22,38 @@
       <h4 class="list-group-item-heading">
         Description: {{pressbook.description}}
       </h4>
+
+      <div ng-show="pressbook.edit">
+        <form name="pressbookForm" class="form-horizontal" data-ng-submit="update(pressbook, Form.$valid)" novalidate>
+          <fieldset>
+            <div class="form-group" ng-class="{ 'has-error' : submitted && pressbookForm.title.$invalid}">
+              <label class="control-label" for="title">Title</label>
+              <div class="controls">
+                <input name="title" type="text" data-ng-model="pressbookTempo.title" id="title" class="form-control" placeholder="Title" required>
+              </div>
+              <div ng-show="submitted && pressbookForm.title.$invalid" class="help-block">
+                <p ng-show="pressbookForm.title.$error.required" class="text-danger">Title is required</p>
+              </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : submitted && pressbookForm.description.$invalid}">
+              <label class="control-label" for="description">Description</label>
+              <div class="controls">
+                <input name="description" type="text" data-ng-model="pressbookTempo.description" id="description" class="form-control" placeholder="Description" required>
+              </div>
+              <div ng-show="submitted && pressbookForm.description.$invalid" class="help-block">
+                <p ng-show="pressbookForm.description.$error.required" class="text-danger">Description is required</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="submit" value="Update" class="btn btn-default">
+            </div>
+            <div data-ng-show="error" class="text-danger">
+              <strong data-ng-bind="error"></strong>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
       <small class="list-group-item-text">
         Added on
         <span data-ng-bind="pressbook.created | date:'mediumDate'"></span>
