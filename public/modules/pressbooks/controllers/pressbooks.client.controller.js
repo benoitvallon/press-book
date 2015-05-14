@@ -86,5 +86,9 @@ angular.module('pressbooks').controller('PressbooksController', ['$scope', '$sta
         $scope.pressbookTempo.placeholder4 = '';
       }
     };
+
+    $scope.updateText = function() {
+      $scope.textTemplateEncoded = encodeURIComponent($scope.textTemplate);
+    };
   }
 ]);

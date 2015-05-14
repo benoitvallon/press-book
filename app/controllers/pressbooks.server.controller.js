@@ -29,10 +29,18 @@ var getImageLink = function (pressbook) {
     return pressbook.pin.imageLink.replace('237x', '736x');
   }
 };
+var getSourceUrl = function(pressbook) {
+  if(pressbook && pressbook.pin) {
+    return 'Source: ' + pressbook.pin.link;
+  } else {
+    return '';
+  }
+};
 
 exports.generate = function(req, res) {
+  var textTemplate = unescape(req.query.text) || '';
 
-  Pressbook.find().sort('-created').populate('image', 'filename').populate('pin', 'imageLink').exec(function(err, pressbooks) {
+  Pressbook.find().sort('-created').populate([{path:'image', select:'filename'}, {path:'pin', select:'imageLink link'}]).exec(function(err, pressbooks) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -47,20 +55,18 @@ exports.generate = function(req, res) {
       };
 
       async.forEach(pressbooks, function(pressbook, callback) {
-
-        pressbook.imageLink = getImageLink(pressbook);
-        var htmlWithContent = html
-          .replace(/%%imageLink%%/, pressbook.imageLink)
-          .replace(/%%text%%/, '<div>' +
-            'Design by XXX for %%placeholder1%%<br>' +
-            'Collection: %%placeholder2%%<br>' +
-            'Description: %%placeholder4%%<br>' +
-            'Source: http://www.google.com' +
-            '</div>')
+        var textTemplateWithContent = textTemplate
           .replace(/%%placeholder1%%/g, pressbook.placeholder1)
           .replace(/%%placeholder2%%/g, pressbook.placeholder2)
           .replace(/%%placeholder3%%/g, pressbook.placeholder3)
-          .replace(/%%placeholder4%%/g, pressbook.placeholder4);
+          .replace(/%%placeholder4%%/g, pressbook.placeholder4)
+          .replace(/%%sourceUrl%%/g, getSourceUrl(pressbook))
+          .trim()
+          .replace(/\n|\r/g, '<br>');
+
+        var htmlWithContent = html
+          .replace(/%%imageLink%%/, getImageLink(pressbook))
+          .replace(/%%text%%/, textTemplateWithContent);
 
         pdf.create(htmlWithContent, options).toBuffer(function(err, data) {
           if (err) return console.log(err);
@@ -169,7 +175,7 @@ exports.list = function(req, res) {
  * Pressbook middleware
  */
 exports.pressbookByID = function(req, res, next, id) {
-  Pressbook.findById(id).populate('image', 'size').exec(function(err, pressbook) {
+  Pressbook.findById(id).populate('image', 'filename').exec(function(err, pressbook) {
     if (err) return next(err);
     if (!pressbook) return next(new Error('Failed to load pressbook ' + id));
     req.pressbook = pressbook;

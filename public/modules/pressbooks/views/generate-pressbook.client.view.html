@@ -3,7 +3,22 @@
     <h1>Generare Pressbooks</h1>
   </div>
 
-  <a class="btn btn-primary" href="/pressbooks/generate" target="_blank">
+  <div class="form-group">
+    <label class="control-label" for="placeholder4">Edit the text to display on every page, an example can be:</label>
+    <br>
+    <em>Design by XXX for %%placeholder1%%<br>
+    Collection: %%placeholder2%%<br>
+    Media: %%placeholder3%%<br>
+    Description: %%placeholder4%%<br><br>
+    %%sourceUrl%%<br>
+    <em>
+    <br>
+    <div class="controls">
+      <textarea name="placeholder4" rows="4" id="placeholder4" class="form-control" data-ng-keyup="updateText()" data-ng-model="textTemplate" placeholder="Placeholder 4, Ex: Description"></textarea>
+    </div>
+  </div>
+
+  <a class="btn btn-primary" ng-href="/pressbooks/generate?text={{textTemplateEncoded}}" target="_blank">
     Generare Pressbooks
   </a>
 
