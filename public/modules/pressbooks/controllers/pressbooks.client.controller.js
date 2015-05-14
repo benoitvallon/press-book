@@ -21,13 +21,21 @@ angular.module('pressbooks').controller('PressbooksController', ['$scope', '$sta
     };
 
     $scope.update = function(pressbook) {
-      if($scope.pressbookTempo.title) {
-        pressbook.title = $scope.pressbookTempo.title;
-        $scope.pressbookTempo.title = '';
+      if($scope.pressbookTempo.placeholder1) {
+        pressbook.placeholder1 = $scope.pressbookTempo.placeholder1;
+        $scope.pressbookTempo.placeholder1 = '';
       }
-      if($scope.pressbookTempo.description) {
-        pressbook.description = $scope.pressbookTempo.description;
-        $scope.pressbookTempo.description = '';
+      if($scope.pressbookTempo.placeholder2) {
+        pressbook.placeholder2 = $scope.pressbookTempo.placeholder2;
+        $scope.pressbookTempo.placeholder2 = '';
+      }
+      if($scope.pressbookTempo.placeholder3) {
+        pressbook.placeholder3 = $scope.pressbookTempo.placeholder3;
+        $scope.pressbookTempo.placeholder3 = '';
+      }
+      if($scope.pressbookTempo.placeholder4) {
+        pressbook.placeholder4 = $scope.pressbookTempo.placeholder4;
+        $scope.pressbookTempo.placeholder4 = '';
       }
 
       pressbook.$update(function(err) {
@@ -67,11 +75,15 @@ angular.module('pressbooks').controller('PressbooksController', ['$scope', '$sta
       pressbook.edit = !pressbook.edit;
 
       if(pressbook.edit) {
-        $scope.pressbookTempo.title = pressbook.title;
-        $scope.pressbookTempo.description = pressbook.description;
+        $scope.pressbookTempo.placeholder1 = pressbook.placeholder1;
+        $scope.pressbookTempo.placeholder2 = pressbook.placeholder2;
+        $scope.pressbookTempo.placeholder3 = pressbook.placeholder3;
+        $scope.pressbookTempo.placeholder4 = pressbook.placeholder4;
       } else {
-        $scope.pressbookTempo.title = '';
-        $scope.pressbookTempo.description = '';
+        $scope.pressbookTempo.placeholder1 = '';
+        $scope.pressbookTempo.placeholder2 = '';
+        $scope.pressbookTempo.placeholder3 = '';
+        $scope.pressbookTempo.placeholder4 = '';
       }
     };
   }

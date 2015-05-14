@@ -49,13 +49,20 @@ exports.generate = function(req, res) {
       async.forEach(pressbooks, function(pressbook, callback) {
 
         pressbook.imageLink = getImageLink(pressbook);
-        var htmlWithImage = html.replace(/%%imageLink%%/, pressbook.imageLink);
-        var htmlWithImageAndtext = htmlWithImage.replace(/%%text%%/, '<div class="line">Design by XXX for YYY</div>' +
-        '<div class="line">Collection: XXX 2015</div>' +
-        '<div class="line">Description: ' + pressbook.description + '</div>' +
-        '<div class="line">Source: http://www.google.com</div>');
+        var htmlWithContent = html
+          .replace(/%%imageLink%%/, pressbook.imageLink)
+          .replace(/%%text%%/, '<div>' +
+            'Design by XXX for %%placeholder1%%<br>' +
+            'Collection: %%placeholder2%%<br>' +
+            'Description: %%placeholder4%%<br>' +
+            'Source: http://www.google.com' +
+            '</div>')
+          .replace(/%%placeholder1%%/g, pressbook.placeholder1)
+          .replace(/%%placeholder2%%/g, pressbook.placeholder2)
+          .replace(/%%placeholder3%%/g, pressbook.placeholder3)
+          .replace(/%%placeholder4%%/g, pressbook.placeholder4);
 
-        pdf.create(htmlWithImageAndtext, options).toBuffer(function(err, data) {
+        pdf.create(htmlWithContent, options).toBuffer(function(err, data) {
           if (err) return console.log(err);
           zip.file('template' + Math.floor(Math.random() * (1000 - 0)) + 0 + '.pdf', data);
           callback();

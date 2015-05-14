@@ -17,32 +17,45 @@
       </div>
 
       <h4 class="list-group-item-heading">
-        Name: {{pressbook.title}}
+        Placeholder 1 (Ex: Title): {{pressbook.placeholder1}}
       </h4>
       <h4 class="list-group-item-heading">
-        Description: {{pressbook.description}}
+        Placeholder 2 (Ex: Subtitle): {{pressbook.placeholder2}}
+      </h4>
+      <h4 class="list-group-item-heading">
+        Placeholder 3 (Ex: Source): {{pressbook.placeholder3}}
+      </h4>
+      <h4 class="list-group-item-heading">
+        Placeholder 4 (Ex: Description): {{pressbook.placeholder4}}
       </h4>
 
       <div ng-show="pressbook.edit">
         <br>
         <form name="pressbookForm" class="" data-ng-submit="update(pressbook, Form.$valid)" novalidate>
           <fieldset>
-            <div class="form-group" ng-class="{ 'has-error' : submitted && pressbookForm.title.$invalid}">
-              <label class="control-label" for="title">Title</label>
+            <div class="form-group" ng-class="{ 'has-error' : submitted && pressbookForm.placeholder1.$invalid}">
+              <label class="control-label" for="placeholder1">Placeholder 1 (Ex: Title)</label>
               <div class="controls">
-                <input name="title" type="text" data-ng-model="pressbookTempo.title" id="title" class="form-control" placeholder="Title" required>
-              </div>
-              <div ng-show="submitted && pressbookForm.title.$invalid" class="help-block">
-                <p ng-show="pressbookForm.title.$error.required" class="text-danger">Title is required</p>
+                <input name="placeholder1" type="text" data-ng-model="pressbookTempo.placeholder1" id="placeholder1" class="form-control" placeholder="Placeholder 1, Ex: Title">
               </div>
             </div>
-            <div class="form-group" ng-class="{ 'has-error' : submitted && pressbookForm.description.$invalid}">
-              <label class="control-label" for="description">Description</label>
+            <div class="form-group" ng-class="{ 'has-error' : submitted && pressbookForm.placeholder2.$invalid}">
+              <label class="control-label" for="placeholder2">Placeholder 2 (Ex: Subtitle)</label>
               <div class="controls">
-                <input name="description" type="text" data-ng-model="pressbookTempo.description" id="description" class="form-control" placeholder="Description" required>
+                <input name="placeholder2" type="text" data-ng-model="pressbookTempo.placeholder2" id="placeholder2" class="form-control" placeholder="Placeholder 2, Ex: Subtitle">
               </div>
-              <div ng-show="submitted && pressbookForm.description.$invalid" class="help-block">
-                <p ng-show="pressbookForm.description.$error.required" class="text-danger">Description is required</p>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : submitted && pressbookForm.placeholder3.$invalid}">
+              <label class="control-label" for="placeholder3">Placeholder 3 (Ex: Source)</label>
+              <div class="controls">
+                <input name="placeholder3" type="text" data-ng-model="pressbookTempo.placeholder3" id="placeholder3" class="form-control" placeholder="Placeholder 3, Ex: Source">
+              </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : submitted && pressbookForm.placeholder4.$invalid}">
+              <label class="control-label" for="placeholder4">Placeholder 4 (Ex: Description)</label>
+              <div class="controls">
+                <textarea name="placeholder4" data-ng-model="pressbookTempo.placeholder4" id="placeholder4" class="form-control" placeholder="Placeholder 4, Ex: Description">
+                </textarea>
               </div>
             </div>
             <div class="form-group">

@@ -22,12 +22,22 @@ var PressbookSchema = new Schema({
     type: String,
     ref: 'Image'
   },
-  title: {
+  placeholder1: {
     type: String,
     default: '',
     trim: true
   },
-  description: {
+  placeholder2: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  placeholder3: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  placeholder4: {
     type: String,
     default: '',
     trim: true
