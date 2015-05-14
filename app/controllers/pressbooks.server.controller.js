@@ -22,13 +22,26 @@ exports.read = function(req, res) {
 
 exports.generate = function(req, res) {
 
-  var html = fs.readFileSync('template-html.html', 'utf8');
-  var options = { filename: 'template.pdf', format: 'Letter' };
+  var html = fs.readFileSync('template.html', 'utf8');
+  console.log('html', html);
+  html = html.replace(/%%imageLink%%/, 'http://localhost:3000/images/placeholder-800x1200-vert.png');
 
-  pdf.create(html, options).toFile(function(err, data) {
+  html = html.replace(/%%text%%/, '<div class="line">Design by XXX for YYY</div>' +
+  '<div class="line">Collection: XXX 2015</div>' +
+  '<div class="line">Source: http://www.google.com</div>');
+
+  console.log('html', html);
+  var options = {
+    filename: 'template.pdf',
+    format: 'A4',
+    quality: 100,
+  };
+
+  pdf.create(html, options).toBuffer(function(err, data) {
     if (err) return console.log(err);
-    console.log(data); // { filename: '/tmp/html-pdf-8ymPV.pdf' }
-    res.json({});
+
+    res.contentType('application/pdf');
+    res.send(data);
   });
 
 };
