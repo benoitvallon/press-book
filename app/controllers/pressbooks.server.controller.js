@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+  config = require('../../config/config'),
   async = require('async'),
   errorHandler = require('./errors.server.controller'),
   Pressbook = mongoose.model('Pressbook'),
@@ -11,6 +12,7 @@ var mongoose = require('mongoose'),
   ImageModel = mongoose.model('Image'),
   pdf = require('html-pdf'),
   fs = require('fs'),
+  NodeZip = new require('node-zip'),
   _ = require('lodash');
 
 /**
@@ -20,30 +22,57 @@ exports.read = function(req, res) {
   res.json(req.pressbook);
 };
 
+var getImageLink = function (pressbook) {
+  if(pressbook && pressbook.image) {
+    return 'http://localhost:' + config.port + '/uploads/' + pressbook.image.filename;
+  } else if(pressbook && pressbook.pin) {
+    return pressbook.pin.imageLink.replace('237x', '736x');
+  }
+};
+
 exports.generate = function(req, res) {
 
-  var html = fs.readFileSync('template.html', 'utf8');
-  console.log('html', html);
-  html = html.replace(/%%imageLink%%/, 'http://localhost:3000/images/placeholder-800x1200-vert.png');
+  Pressbook.find().sort('-created').populate('image', 'filename').populate('pin', 'imageLink').exec(function(err, pressbooks) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
 
-  html = html.replace(/%%text%%/, '<div class="line">Design by XXX for YYY</div>' +
-  '<div class="line">Collection: XXX 2015</div>' +
-  '<div class="line">Source: http://www.google.com</div>');
+      var zip = new NodeZip();
+      var html = fs.readFileSync('template.html', 'utf8');
+      var options = {
+        format: 'A4',
+        quality: 100,
+      };
 
-  console.log('html', html);
-  var options = {
-    filename: 'template.pdf',
-    format: 'A4',
-    quality: 100,
-  };
+      async.forEach(pressbooks, function(pressbook, callback) {
 
-  pdf.create(html, options).toBuffer(function(err, data) {
-    if (err) return console.log(err);
+        pressbook.imageLink = getImageLink(pressbook);
+        var htmlWithImage = html.replace(/%%imageLink%%/, pressbook.imageLink);
+        var htmlWithImageAndtext = htmlWithImage.replace(/%%text%%/, '<div class="line">Design by XXX for YYY</div>' +
+        '<div class="line">Collection: XXX 2015</div>' +
+        '<div class="line">Description: ' + pressbook.description + '</div>' +
+        '<div class="line">Source: http://www.google.com</div>');
 
-    res.contentType('application/pdf');
-    res.send(data);
+        pdf.create(htmlWithImageAndtext, options).toBuffer(function(err, data) {
+          if (err) return console.log(err);
+          zip.file('template' + Math.floor(Math.random() * (1000 - 0)) + 0 + '.pdf', data);
+          callback();
+        });
+      }, function(err) {
+        var willSendthis = zip.generate({
+          base64:false,
+          compression:'DEFLATE'
+        });
+
+        res.set('Content-Type', 'application/zip');
+        res.set('Content-Disposition', 'attachment; filename=pressbook.zip');
+        res.set('Content-Length', willSendthis.length);
+        res.end(willSendthis, 'binary');
+      });
+    }
   });
-
 };
 
 /**
