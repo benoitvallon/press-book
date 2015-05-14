@@ -33,28 +33,28 @@
         <br>
         <form name="pressbookForm" class="" data-ng-submit="update(pressbook, Form.$valid)" novalidate>
           <fieldset>
-            <div class="form-group" ng-class="{ 'has-error' : submitted && pressbookForm.placeholder1.$invalid}">
+            <div class="form-group">
               <label class="control-label" for="placeholder1">Placeholder 1 (Ex: Title)</label>
-              <div class="controls">
-                <input name="placeholder1" type="text" data-ng-model="pressbookTempo.placeholder1" id="placeholder1" class="form-control" placeholder="Placeholder 1, Ex: Title">
+              <div class="controls" mass-autocomplete>
+                <input name="placeholder1" type="text" data-ng-model="placeholder1.value" mass-autocomplete-item="acPlaceholder1" id="placeholder1" class="form-control" placeholder="Placeholder 1, Ex: Title">
               </div>
             </div>
-            <div class="form-group" ng-class="{ 'has-error' : submitted && pressbookForm.placeholder2.$invalid}">
+            <div class="form-group">
               <label class="control-label" for="placeholder2">Placeholder 2 (Ex: Subtitle)</label>
-              <div class="controls">
-                <input name="placeholder2" type="text" data-ng-model="pressbookTempo.placeholder2" id="placeholder2" class="form-control" placeholder="Placeholder 2, Ex: Subtitle">
+              <div class="controls" mass-autocomplete>
+                <input name="placeholder2" type="text" data-ng-model="placeholder2.value" mass-autocomplete-item="acPlaceholder2" id="placeholder2" class="form-control" placeholder="Placeholder 2, Ex: Subtitle">
               </div>
             </div>
-            <div class="form-group" ng-class="{ 'has-error' : submitted && pressbookForm.placeholder3.$invalid}">
+            <div class="form-group">
               <label class="control-label" for="placeholder3">Placeholder 3 (Ex: Source)</label>
-              <div class="controls">
-                <input name="placeholder3" type="text" data-ng-model="pressbookTempo.placeholder3" id="placeholder3" class="form-control" placeholder="Placeholder 3, Ex: Source">
+              <div class="controls" mass-autocomplete>
+                <input name="placeholder3" type="text" data-ng-model="placeholder3.value" mass-autocomplete-item="acPlaceholder3" id="placeholder3" class="form-control" placeholder="Placeholder 3, Ex: Source">
               </div>
             </div>
-            <div class="form-group" ng-class="{ 'has-error' : submitted && pressbookForm.placeholder4.$invalid}">
+            <div class="form-group">
               <label class="control-label" for="placeholder4">Placeholder 4 (Ex: Description)</label>
               <div class="controls">
-                <textarea name="placeholder4" data-ng-model="pressbookTempo.placeholder4" id="placeholder4" class="form-control" placeholder="Placeholder 4, Ex: Description">
+                <textarea name="placeholder4" data-ng-model="placeholder4.value" id="placeholder4" class="form-control" placeholder="Placeholder 4, Ex: Description">
                 </textarea>
               </div>
             </div>
