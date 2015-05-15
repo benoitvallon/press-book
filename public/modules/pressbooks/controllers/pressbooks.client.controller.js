@@ -1,7 +1,9 @@
 'use strict';
 
-angular.module('pressbooks').controller('PressbooksController', ['$scope', '$stateParams', '$location', 'Pressbooks', '$http',
-  function($scope, $stateParams, $location, Pressbooks, $http) {
+angular.module('pressbooks').controller('PressbooksController', ['$scope', '$stateParams', '$location', 'Pressbooks', '$http', 'Authentication',
+  function($scope, $stateParams, $location, Pressbooks, $http, Authentication) {
+    $scope.authentication = Authentication;
+
     $scope.pressbookTempo = {};
 
     $scope.placeholder1 = {};

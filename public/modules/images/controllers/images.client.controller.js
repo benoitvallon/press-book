@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('images').controller('ImagesController', ['$scope', '$stateParams', '$location', 'Images', '$http', 'FileUploader',
-  function($scope, $stateParams, $location, Images, $http, FileUploader) {
+angular.module('images').controller('ImagesController', ['$scope', '$stateParams', '$location', 'Images', '$http', 'FileUploader', 'Authentication',
+  function($scope, $stateParams, $location, Images, $http, FileUploader, Authentication) {
+    $scope.authentication = Authentication;
 
     var uploader = $scope.uploader = new FileUploader({
         url: '/images'
