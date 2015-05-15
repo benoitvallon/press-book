@@ -43,6 +43,8 @@ exports.create = function(req, res) {
       pin.description = pin.description.replace(/&#160;/g, ' ');
 
       pin = new Pin(pin);
+      pin.user = req.user;
+
       pin.save(function(err) {
         callback(); // tell async that the iterator has completed
       });
@@ -83,6 +85,7 @@ exports.update = function(req, res) {
   // the pin must be in pressbook and does not have an id, it needs to be created
   if(pin.isInPressbook && !pin.pressbookID) {
     pressbook.pin = pin._id;
+    pressbook.user = req.user;
     pressbook.placeholder4 = pin.description;
     pressbook.save(function(err, data) {
       if (err) {
@@ -133,7 +136,7 @@ exports.delete = function(req, res) {
  * List of Pins
  */
 exports.list = function(req, res) {
-  Pin.find().exec(function(err, pins) {
+  Pin.find({user: req.user}).exec(function(err, pins) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -148,10 +151,22 @@ exports.list = function(req, res) {
  * Pin middleware
  */
 exports.pinByID = function(req, res, next, id) {
-  Pin.findById(id).populate('user', 'displayName').exec(function(err, pin) {
+  Pin.findById(id).exec(function(err, pin) {
     if (err) return next(err);
     if (!pin) return next(new Error('Failed to load pin ' + id));
     req.pin = pin;
     next();
   });
+};
+
+/**
+ * Pin authorization middleware
+ */
+exports.hasAuthorization = function(req, res, next) {
+  if (req.pin.user.toString() !== req.user.id) {
+    return res.status(403).send({
+      message: 'User is not authorized'
+    });
+  }
+  next();
 };

@@ -34,9 +34,11 @@ exports.create = function(req, res) {
         files.file.filename = checksum;
         files.file.width = dimensions.width;
         files.file.height = dimensions.height;
-        var file = new ImageModel(files.file);
-        file.save(function(err) {
-          res.json({});
+        var image = new ImageModel(files.file);
+        image.user = req.user;
+
+        image.save(function(err) {
+          res.json(image);
         });
       });
     });
@@ -73,6 +75,7 @@ exports.update = function(req, res) {
   // the image must be in pressbook and does not have an id, it needs to be created
   if(image.isInPressbook && !image.pressbookID) {
     pressbook.image = image._id;
+    pressbook.user = req.user;
     pressbook.save(function(err, data) {
       if (err) {
         return res.status(400).send({
@@ -122,7 +125,7 @@ exports.delete = function(req, res) {
  * List of Images
  */
 exports.list = function(req, res) {
-  ImageModel.find().exec(function(err, images) {
+  ImageModel.find({user: req.user}).exec(function(err, images) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -137,10 +140,22 @@ exports.list = function(req, res) {
  * Image middleware
  */
 exports.imageByID = function(req, res, next, id) {
-  ImageModel.findById(id).populate('user', 'displayName').exec(function(err, image) {
+  ImageModel.findById(id).exec(function(err, image) {
     if (err) return next(err);
     if (!image) return next(new Error('Failed to load image ' + id));
     req.image = image;
     next();
   });
+};
+
+/**
+ * Image authorization middleware
+ */
+exports.hasAuthorization = function(req, res, next) {
+  if (req.image.user.toString() !== req.user.id) {
+    return res.status(403).send({
+      message: 'User is not authorized'
+    });
+  }
+  next();
 };

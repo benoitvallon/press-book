@@ -3,20 +3,21 @@
 /**
  * Module dependencies.
  */
-var pressbooks = require('../../app/controllers/pressbooks.server.controller');
+var users = require('../../app/controllers/users.server.controller'),
+    pressbooks = require('../../app/controllers/pressbooks.server.controller');
 
 module.exports = function(app) {
   // Pressbook Routes
   app.route('/pressbooks')
-    .get(pressbooks.list);
+    .get(users.requiresLogin, pressbooks.list);
 
   app.route('/pressbooks/generate')
-    .get(pressbooks.generate);
+    .get(users.requiresLogin, pressbooks.generate);
 
   app.route('/pressbooks/:pressbookId')
-    .get(pressbooks.read)
-    .put(pressbooks.update)
-    .delete(pressbooks.delete);
+    .get(users.requiresLogin, pressbooks.hasAuthorization, pressbooks.read)
+    .put(users.requiresLogin, pressbooks.hasAuthorization, pressbooks.update)
+    .delete(users.requiresLogin, pressbooks.hasAuthorization, pressbooks.delete);
 
   // Finish by binding the pressbook middleware
   app.param('pressbookId', pressbooks.pressbookByID);

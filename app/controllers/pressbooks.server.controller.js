@@ -40,7 +40,7 @@ var getSourceUrl = function(pressbook) {
 exports.generate = function(req, res) {
   var textTemplate = unescape(req.query.text) || '';
 
-  Pressbook.find().sort('-created').populate([{path:'image', select:'filename'}, {path:'pin', select:'imageLink link'}]).exec(function(err, pressbooks) {
+  Pressbook.find({user: req.user}).populate([{path:'image', select:'filename'}, {path:'pin', select:'imageLink link'}]).exec(function(err, pressbooks) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -160,7 +160,7 @@ exports.delete = function(req, res) {
  * List of Pressbooks
  */
 exports.list = function(req, res) {
-  Pressbook.find().sort('-created').populate('image', 'filename').populate('pin', 'imageLink').exec(function(err, pressbooks) {
+  Pressbook.find({user: req.user}).sort('-created').populate('image', 'filename').populate('pin', 'imageLink').exec(function(err, pressbooks) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -175,10 +175,22 @@ exports.list = function(req, res) {
  * Pressbook middleware
  */
 exports.pressbookByID = function(req, res, next, id) {
-  Pressbook.findById(id).populate('image', 'filename').exec(function(err, pressbook) {
+  Pressbook.findById(id).exec(function(err, pressbook) {
     if (err) return next(err);
     if (!pressbook) return next(new Error('Failed to load pressbook ' + id));
     req.pressbook = pressbook;
     next();
   });
+};
+
+/**
+ * Pressbook authorization middleware
+ */
+exports.hasAuthorization = function(req, res, next) {
+  if (req.pressbook.user.toString() !== req.user.id) {
+    return res.status(403).send({
+      message: 'User is not authorized'
+    });
+  }
+  next();
 };

@@ -14,6 +14,10 @@ var PressbookSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  },
   pin: {
     type: String,
     ref: 'Pin'

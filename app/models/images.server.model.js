@@ -14,6 +14,10 @@ var ImageSchema = new Schema({
     type: String,
     default: '',
   },
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  },
   created: {
     type: Date,
     default: Date.now
