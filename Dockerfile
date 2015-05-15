@@ -1,10 +1,11 @@
-FROM node:0.12-slim
+FROM node:0.12
 
-RUN apt-get update && apt-get install -y git bzip2
+RUN apt-get update && apt-get install -y git bzip2 g++ flex bison gperf ruby perl libsqlite3-dev libfontconfig1-dev libicu-dev libfreetype6 libssl-dev libpng-dev libjpeg-dev python
 
 WORKDIR /home/mean
 
 # Install Mean.JS Prerequisites
+RUN npm install -g node-gyp nan
 RUN npm install -g grunt-cli
 RUN npm install -g bower
 
