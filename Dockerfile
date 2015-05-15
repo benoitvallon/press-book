@@ -1,6 +1,6 @@
-FROM dockerfile/nodejs
+FROM node:0.12-slim
 
-MAINTAINER Matthias Luebken, matthias@catalyst-zero.com
+RUN apt-get update && apt-get install -y git bzip2
 
 WORKDIR /home/mean
 
@@ -25,5 +25,6 @@ ENV NODE_ENV development
 
 # Port 3000 for server
 # Port 35729 for livereload
-EXPOSE 3000 35729
+EXPOSE 3000
+
 CMD ["grunt"]
