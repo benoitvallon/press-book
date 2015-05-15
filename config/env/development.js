@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  db: 'mongodb://localhost/press-book-dev',
+  db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.MONGO_PORT_27017_TCP_ADDR || 'localhost') + '/press-book-dev',
   app: {
     title: 'press-book - Development Environment'
   },
