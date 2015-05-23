@@ -30,7 +30,7 @@ exports.create = function(req, res) {
       var dimensions = sizeOf(data);
 
       fs.writeFile(newPath, data, function (err) {
-        files.file._id = checksum;
+        files.file._id = checksum + req.user._id;
         files.file.filename = checksum;
         files.file.width = dimensions.width;
         files.file.height = dimensions.height;

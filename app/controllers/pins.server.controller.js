@@ -32,7 +32,7 @@ exports.create = function(req, res) {
   pinterest.getPinsFromBoard(req.body.boardName, true, function (pins) {
     async.forEach(pins.data, function (pin, callback){
       // adding some data
-      pin._id = pin.id;
+      pin._id = pin.id + req.user._id;
       pin.accountName = req.body.accountName;
       pin.boardName = req.body.boardName;
       pin.imageLink = pin.images['237x'].url;
