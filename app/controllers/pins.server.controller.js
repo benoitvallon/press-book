@@ -136,7 +136,7 @@ exports.delete = function(req, res) {
  * List of Pins
  */
 exports.list = function(req, res) {
-  Pin.find({user: req.user}).exec(function(err, pins) {
+  Pin.find().exec(function(err, pins) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
