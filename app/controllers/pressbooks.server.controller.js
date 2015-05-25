@@ -52,6 +52,7 @@ exports.generate = function(req, res) {
       var options = {
         format: 'A4',
         quality: 100,
+        timeout: 300000
       };
 
       async.forEach(pressbooks, function(pressbook, callback) {
