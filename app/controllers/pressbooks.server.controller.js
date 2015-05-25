@@ -57,10 +57,10 @@ exports.generate = function(req, res) {
 
       async.forEach(pressbooks, function(pressbook, callback) {
         var textTemplateWithContent = textTemplate
-          .replace(/%%placeholder1%%/g, pressbook.placeholder1)
-          .replace(/%%placeholder2%%/g, pressbook.placeholder2)
-          .replace(/%%placeholder3%%/g, pressbook.placeholder3)
-          .replace(/%%placeholder4%%/g, pressbook.placeholder4)
+          .replace(/%%placeholder1%%/g, pressbook.placeholder1.trim())
+          .replace(/%%placeholder2%%/g, pressbook.placeholder2.trim())
+          .replace(/%%placeholder3%%/g, pressbook.placeholder3.trim())
+          .replace(/%%placeholder4%%/g, pressbook.placeholder4.trim())
           .replace(/%%sourceUrl%%/g, getSourceUrl(pressbook))
           .trim()
           .replace(/\n|\r/g, '<br>');
