@@ -126,12 +126,16 @@ exports.delete = function(req, res) {
   if(pressbook.image) {
     ImageModel.findById(pressbook.image, function(err, image) {
       relatedAsset = image;
-      saveAsset();
+      if(relatedAsset) {
+        saveAsset();
+      }
     });
   } else if(pressbook.pin) {
     Pin.findById(pressbook.pin, function(err, pin) {
       relatedAsset = pin;
-      saveAsset();
+      if(relatedAsset) {
+        saveAsset();
+      }
     });
   }
 
