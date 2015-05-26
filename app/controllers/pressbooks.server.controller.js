@@ -70,7 +70,7 @@ exports.generate = function(req, res) {
           .replace(/%%text%%/, textTemplateWithContent);
 
         pdf.create(htmlWithContent, options).toBuffer(function(err, data) {
-          if (err) return console.log(err);
+          if (err) console.log(err);
           zip.file('template' + Math.floor(Math.random() * (1000 - 0)) + 0 + '.pdf', data);
           callback();
         });
