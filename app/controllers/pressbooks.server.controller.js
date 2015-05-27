@@ -71,7 +71,7 @@ exports.generate = function(req, res) {
 
         pdf.create(htmlWithContent, options).toBuffer(function(err, data) {
           if (err) console.log(err);
-          zip.file('template' + Math.floor(Math.random() * (1000 - 0)) + 0 + '.pdf', data);
+          zip.file('template-' + pressbook._id + '.pdf', data);
           callback();
         });
       }, function(err) {
@@ -127,19 +127,55 @@ exports.delete = function(req, res) {
     ImageModel.findById(pressbook.image, function(err, image) {
       relatedAsset = image;
       if(relatedAsset) {
-        saveAsset();
+        saveAsset(function() {
+          pressbook.remove(function(err) {
+            if (err) {
+              return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+              });
+            }
+            res.json(pressbook);
+          });
+        });
+      } else {
+        pressbook.remove(function(err) {
+          if (err) {
+            return res.status(400).send({
+              message: errorHandler.getErrorMessage(err)
+            });
+          }
+          res.json(pressbook);
+        });
       }
     });
   } else if(pressbook.pin) {
     Pin.findById(pressbook.pin, function(err, pin) {
       relatedAsset = pin;
       if(relatedAsset) {
-        saveAsset();
+        saveAsset(function() {
+          pressbook.remove(function(err) {
+            if (err) {
+              return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+              });
+            }
+            res.json(pressbook);
+          });
+        });
+      } else {
+        pressbook.remove(function(err) {
+          if (err) {
+            return res.status(400).send({
+              message: errorHandler.getErrorMessage(err)
+            });
+          }
+          res.json(pressbook);
+        });
       }
     });
   }
 
-  var saveAsset = function() {
+  var saveAsset = function(callback) {
     relatedAsset.isInPressbook = false;
     relatedAsset.pressbookID = '';
     console.log('relatedAsset', relatedAsset);
@@ -149,14 +185,7 @@ exports.delete = function(req, res) {
           message: errorHandler.getErrorMessage(err)
         });
       }
-      pressbook.remove(function(err) {
-        if (err) {
-          return res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
-          });
-        }
-        res.json(pressbook);
-      });
+      callback();
     });
   };
 };
