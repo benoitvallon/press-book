@@ -14,6 +14,9 @@ module.exports = function(app) {
   app.route('/pressbooks/generate')
     .get(users.requiresLogin, pressbooks.generate);
 
+  app.route('/pressbooks/generate/:pressbookId')
+    .get(users.requiresLogin, pressbooks.generateOne);
+
   app.route('/pressbooks/:pressbookId')
     .get(users.requiresLogin, pressbooks.hasAuthorization, pressbooks.read)
     .put(users.requiresLogin, pressbooks.hasAuthorization, pressbooks.update)

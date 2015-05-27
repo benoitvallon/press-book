@@ -89,6 +89,49 @@ exports.generate = function(req, res) {
   });
 };
 
+exports.generateOne = function(req, res) {
+  var textTemplate = unescape(req.query.text) || '';
+
+  var zip = new NodeZip();
+  var html = fs.readFileSync('template.html', 'utf8');
+  var options = {
+    format: 'A4',
+    quality: 100,
+    timeout: 300000
+  };
+
+  async.forEach([req.pressbook], function(pressbook, callback) {
+    var textTemplateWithContent = textTemplate
+      .replace(/%%placeholder1%%/g, pressbook.placeholder1.trim())
+      .replace(/%%placeholder2%%/g, pressbook.placeholder2.trim())
+      .replace(/%%placeholder3%%/g, pressbook.placeholder3.trim())
+      .replace(/%%placeholder4%%/g, pressbook.placeholder4.trim())
+      .replace(/%%sourceUrl%%/g, getSourceUrl(pressbook))
+      .trim()
+      .replace(/\n|\r/g, '<br>');
+
+    var htmlWithContent = html
+      .replace(/%%imageLink%%/, getImageLink(pressbook))
+      .replace(/%%text%%/, textTemplateWithContent);
+
+    pdf.create(htmlWithContent, options).toBuffer(function(err, data) {
+      if (err) console.log(err);
+      zip.file('template-' + pressbook._id + '.pdf', data);
+      callback();
+    });
+  }, function(err) {
+    var willSendthis = zip.generate({
+      base64:false,
+      compression:'DEFLATE'
+    });
+
+    res.set('Content-Type', 'application/zip');
+    res.set('Content-Disposition', 'attachment; filename=pressbook.zip');
+    res.set('Content-Length', willSendthis.length);
+    res.end(willSendthis, 'binary');
+  });
+};
+
 /**
  * Update a pressbook
  */
@@ -209,7 +252,7 @@ exports.list = function(req, res) {
  * Pressbook middleware
  */
 exports.pressbookByID = function(req, res, next, id) {
-  Pressbook.findById(id).exec(function(err, pressbook) {
+  Pressbook.findById(id).populate('image', 'filename').populate('pin', 'imageLink').exec(function(err, pressbook) {
     if (err) return next(err);
     if (!pressbook) return next(new Error('Failed to load pressbook ' + id));
     req.pressbook = pressbook;

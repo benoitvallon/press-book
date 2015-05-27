@@ -1,22 +1,55 @@
 <section data-ng-controller="PressbooksController" data-ng-init="findOne()">
   <div class="page-header">
-    <h1 data-ng-bind="pressbook.title"></h1>
+    <h4 class="list-group-item-heading">
+      Placeholder 1 (Ex: Title): {{pressbook.placeholder1}}
+    </h4>
+    <h4 class="list-group-item-heading">
+      Placeholder 2 (Ex: Subtitle): {{pressbook.placeholder2}}
+    </h4>
+    <h4 class="list-group-item-heading">
+      Placeholder 3 (Ex: Source): {{pressbook.placeholder3}}
+    </h4>
+    <h4 class="list-group-item-heading">
+      Placeholder 4 (Ex: Description): {{pressbook.placeholder4}}
+    </h4>
   </div>
-  <div class="pull-right" data-ng-show="authentication.user._id == pressbook.user._id">
-    <a class="btn btn-primary" href="/#!/pressbooks/{{pressbook._id}}/edit">
-      <i class="glyphicon glyphicon-edit"></i>
-    </a>
-    <a class="btn btn-primary" data-ng-click="remove();">
-      <i class="glyphicon glyphicon-trash"></i>
-    </a>
-  </div>
+
   <small>
     <em class="text-muted">
-      Posted on
+      Uploaded on
       <span data-ng-bind="pressbook.created | date:'mediumDate'"></span>
-      by
-      <span data-ng-bind="pressbook.user.displayName"></span>
     </em>
   </small>
-  <p class="lead" data-ng-bind="pressbook.content"></p>
+  <div class="clearfix"></div>
+  <div style="text-align:center;">
+    <img data-ng-src="{{getImageLink(pressbook)}}" style="margin-top:40px;max-width:100%;">
+
+  </div>
+
+  <div class="page-header">
+    <h1>Generare Pressbooks</h1>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label" for="placeholder4">Edit the text to display on every page, an example can be:</label>
+    <br>
+    <em>&#60;strong&#62;Design by XXX for %%placeholder1%%&#60;/strong&#62;<br>
+    Collection: %%placeholder2%%<br>
+    Source: %%placeholder3%%<br>
+    Description: %%placeholder4%%<br><br>
+    %%sourceUrl%%<br>
+    <em>
+    <br>
+    <div class="controls">
+      <textarea name="placeholder4" rows="7" id="placeholder4" class="form-control" data-ng-keyup="updateText()" data-ng-model="textTemplate" placeholder="Enter here the text used to generate your pressbook, see the above text for as an example"></textarea>
+    </div>
+  </div>
+
+  <a class="btn btn-primary" ng-href="/pressbooks/generate/{{pressbook._id}}?text={{textTemplateEncoded}}" target="_blank">
+    Generare Pressbook
+  </a>
+  <br>
+  <br>
+  <br>
+
 </section>
